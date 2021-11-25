@@ -11,12 +11,20 @@ public class CommandSystem {
         this.commandStorage = new HashMap<>();
     }
 
+    // This command only exists so that chaining functions can be available immediately
+    public static CommandSystem createSystem() {
+        return new CommandSystem();
+    }
+
+    public HashMap<String, Command> getCommandStorage() { return this.commandStorage; }
+
     public Command getCommandByName(String name) {
         return this.commandStorage.get(name);
     }
 
-    public void addCommand(Command command) {
+    public CommandSystem addCommand(Command command) {
         this.commandStorage.put(command.name, command);
+        return this;
     }
 
     public void executeCommand(MessageReceivedEvent msgEvent, String query) {
