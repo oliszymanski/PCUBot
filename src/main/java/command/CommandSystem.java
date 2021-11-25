@@ -1,7 +1,3 @@
-//=========================================================================
-//      IMPORTS AND PACKAGES
-//=========================================================================
-
 package command;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
