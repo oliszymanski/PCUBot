@@ -1,8 +1,14 @@
+//=========================================================================
+//      IMPORTS AND PACKAGES
+//=========================================================================
+
 package command;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-
+import org.jetbrains.annotations.NotNull;
 import java.util.*;
+
+
 
 public class CommandSystem {
     private final HashMap<String, Command> commandStorage;
@@ -27,7 +33,7 @@ public class CommandSystem {
         return this;
     }
 
-    public void executeCommand(MessageReceivedEvent msgEvent, String query) {
+    public void executeCommand(@NotNull MessageReceivedEvent msgEvent, String query) {
         List<String> queryArray = new ArrayList<>(Arrays.asList(query.split(" ")));
         String potentialCommand = queryArray.get(0);
 
