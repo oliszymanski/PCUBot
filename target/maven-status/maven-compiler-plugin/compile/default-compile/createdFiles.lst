@@ -1,7 +1,0 @@
-command\CommandSystem.class
-command\commands\TestCommand.class
-listeners\MessageListener.class
-command\commands\HelpCommand.class
-command\Command.class
-command\commands\RepeatCommand.class
-Bot.class
