@@ -1,21 +1,27 @@
 package command;
 
+import database.Database;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 
 
 public class CommandSystem {
     private final HashMap<String, Command> commandStorage;
+    private final Database database;
 
-    public CommandSystem() {
+    public CommandSystem(String databaseAddress) {
         this.commandStorage = new HashMap<>();
+        this.database = new Database(databaseAddress);
     }
 
     // This command only exists so that chaining functions can be available immediately
-    public static CommandSystem createSystem() {
-        return new CommandSystem();
+    public static CommandSystem createSystem(String databaseAddress) {
+        return new CommandSystem(databaseAddress);
     }
 
     public HashMap<String, Command> getCommandStorage() { return this.commandStorage; }
