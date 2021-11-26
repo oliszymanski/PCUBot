@@ -6,6 +6,8 @@ Bot for our PCU discord server
 
 ## About the server
 
+Our website:
+
 
 ## About the bot
 
