@@ -12,15 +12,15 @@ import javax.security.auth.login.LoginException;
 
 public class Bot {
     public static void main(String[] args) throws LoginException {
-        CommandSystem commandSystem = CommandSystem.createSystem()
+        if (args.length < 2) {
+            System.out.println("Please ensure all arguments have been specified.");
+            System.exit(1);
+        }
+
+        CommandSystem commandSystem = CommandSystem.createSystem(args[1])
                 .addCommand(new HelpCommand())
                 .addCommand(new TestCommand())
                 .addCommand(new RepeatCommand());
-
-        if (args.length < 1) {
-            System.out.println("Please specify a token");
-            System.exit(1);
-        }
 
         JDABuilder.createLight(args[0], GatewayIntent.GUILD_MESSAGES)
                 .addEventListeners(new MessageListener(commandSystem))
