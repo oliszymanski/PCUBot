@@ -3,8 +3,6 @@ package database;
 import com.mongodb.*;
 import com.mongodb.client.model.DBCollectionUpdateOptions;
 
-import java.util.HashMap;
-
 public class Database {
     private final DB database;
 
@@ -21,6 +19,7 @@ public class Database {
     }
 
     // Just a simple wrapper function
+    // If a document doesn't exist within the database, it gets created instead.
     private WriteResult update(DBCollection collection, DBObject filter, DBObject update) {
         DBCollectionUpdateOptions updateOptions = new DBCollectionUpdateOptions();
         updateOptions.upsert(true);
@@ -28,7 +27,7 @@ public class Database {
         return collection.update(filter, update, updateOptions);
     }
 
-    private DBObject search(DBCollection collection, HashMap<String, String> searchParams) {
+    private DBObject search(DBCollection collection, DBObject searchParams) {
         BasicDBObject query = new BasicDBObject();
 
         for (String key : searchParams.keySet()) {
@@ -40,8 +39,20 @@ public class Database {
         return null;
     }
 
-    public DBObject getRole(HashMap<String, String> searchParams) {
+    public DBObject getRole(DBObject searchParams) {
         DBCollection collection = this.database.getCollection("roles");
         return search(collection, searchParams);
+    }
+
+    public WriteResult updateRole(DBObject filter, DBObject update) {
+        DBCollection collection = this.database.getCollection("roles");
+        return update(collection, filter, update);
+    }
+
+    public void deleteRole(DBObject role) {
+        DBCollection collection = this.database.getCollection("roles");
+        if (role == null) return;
+
+        collection.remove(role);
     }
 }

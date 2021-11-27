@@ -25,6 +25,7 @@ public class CommandSystem {
     }
 
     public HashMap<String, Command> getCommandStorage() { return this.commandStorage; }
+    public Database getDatabase() { return this.database; }
 
     public Command getCommandByName(String name) {
         return this.commandStorage.get(name);

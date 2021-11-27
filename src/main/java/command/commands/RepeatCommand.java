@@ -2,6 +2,7 @@ package command.commands;
 
 import command.Command;
 import command.CommandSystem;
+import command.Parser;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -17,7 +18,7 @@ public class RepeatCommand extends Command {
 
     @Override
     public void execute(MessageReceivedEvent msgEvent, CommandSystem commandSystem, List<String> args) {
-        Integer amountWrapped = tryParse(args.get(0));
+        Integer amountWrapped = Parser.parseInt(args.get(0));
         if (amountWrapped == null) return;
 
         MessageChannel messageChannel = msgEvent.getChannel();
@@ -35,14 +36,5 @@ public class RepeatCommand extends Command {
 
         messageChannel.sendMessage(text.toString()).queue();
 
-    }
-
-    // TODO: Move all possible parsers into a separate class in the future
-    private Integer tryParse(String string) {
-        try {
-            return Integer.parseInt(string);
-        } catch(NumberFormatException e) {
-            return null;
-        }
     }
 }
