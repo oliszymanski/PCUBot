@@ -7,7 +7,7 @@ Bot for our PCU discord server
 ## About the server
 
 Our website:
-
+- [ ] add a website
 
 ## About the bot
 
