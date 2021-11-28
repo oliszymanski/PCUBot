@@ -1,6 +1,7 @@
 import command.CommandSystem;
 import command.commands.HelpCommand;
 import command.commands.RepeatCommand;
+import command.commands.SetRoleCommand;
 import command.commands.TestCommand;
 import listeners.MessageListener;
 
@@ -20,7 +21,8 @@ public class Bot {
         CommandSystem commandSystem = CommandSystem.createSystem(args[1])
                 .addCommand(new HelpCommand())
                 .addCommand(new TestCommand())
-                .addCommand(new RepeatCommand());
+                .addCommand(new RepeatCommand())
+                .addCommand(new SetRoleCommand());
 
         JDABuilder.createLight(args[0], GatewayIntent.GUILD_MESSAGES)
                 .addEventListeners(new MessageListener(commandSystem))
