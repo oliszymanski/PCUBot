@@ -16,6 +16,7 @@ public class HelpCommand extends Command {
         this.description = "shows this message";
         this.usage = "{<command>}";
         this.expectedArgs = 0;
+        this.requiresAdmin = false;
     }
 
     @Override

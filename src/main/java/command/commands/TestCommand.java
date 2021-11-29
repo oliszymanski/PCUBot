@@ -15,6 +15,7 @@ public class TestCommand extends Command {
         this.description = "Tests stuff";
         this.usage = "";
         this.expectedArgs = 0;
+        this.requiresAdmin = false;
     }
 
     @Override

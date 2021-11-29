@@ -9,6 +9,7 @@ public abstract class Command {
     public String description;
     public String usage;
     public int expectedArgs;
+    public boolean requiresAdmin;
 
     public abstract void execute(MessageReceivedEvent msgEvent, CommandSystem commandSystem, List<String> args);
 }

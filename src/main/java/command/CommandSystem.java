@@ -1,8 +1,11 @@
 package command;
 
 import database.Database;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,6 +49,17 @@ public class CommandSystem {
         if (command == null) return;
         if (query.length() < command.expectedArgs) return;
 
+        // Check for permission
+        if (command.requiresAdmin) {
+            Member member = msgEvent.getMember();
+            if (member.hasPermission(Permission.ADMINISTRATOR)) {
+                command.execute(msgEvent, this, queryArray);
+                return;
+            } // TODO: let the user know if they have no permission
+            return;
+        }
+
+        // No need for an else block here, if the command requires admin and the user has no permission, it gets instantly interrupted.
         command.execute(msgEvent, this, queryArray);
     }
 }

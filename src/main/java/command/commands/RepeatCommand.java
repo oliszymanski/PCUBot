@@ -14,6 +14,7 @@ public class RepeatCommand extends Command {
         this.description = "repeats a message a specified amount of times";
         this.usage = "[amount] <text>";
         this.expectedArgs = 2;
+        this.requiresAdmin = false;
     }
 
     @Override

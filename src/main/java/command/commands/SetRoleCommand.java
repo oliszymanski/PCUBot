@@ -20,6 +20,7 @@ public class SetRoleCommand extends Command {
         this.description = "Gives the specified role a priority";
         this.usage = "<roleId> [priority]";
         this.expectedArgs = 2;
+        this.requiresAdmin = true;
     }
 
     @Override
