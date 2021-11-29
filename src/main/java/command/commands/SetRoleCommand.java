@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.jetbrains.annotations.NotNull;
 import widgets.SimpleEmbed;
 
 import java.util.List;
@@ -63,7 +64,7 @@ public class SetRoleCommand extends Command {
         // Handle removal
         if (priority <= 0) {
             database.deleteRole(roleObject);
-            updateInfo = String.format("Succesfully deleted role %s", args.get(0));
+            updateInfo = String.format("Successfully deleted role %s", args.get(0));
         }
 
         embed.setDescription(updateInfo);
@@ -71,7 +72,7 @@ public class SetRoleCommand extends Command {
         return null;
     }
 
-    private void checkAndResolveConflict(Database database, int priority, DBObject roleObject) {
+    private void checkAndResolveConflict(@NotNull Database database, int priority, DBObject roleObject) {
         BasicDBObject searchMap = new BasicDBObject().append("id", new BasicDBObject()
                 .append("$ne", roleObject.get("id"))); // Ensures that the query result won't be the object we've updated just now.
         searchMap.put("priority", priority);
