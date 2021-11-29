@@ -4,6 +4,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import command.Command;
 import command.CommandSystem;
+import command.Failure;
 import command.Parser;
 import database.Database;
 import net.dv8tion.jda.api.entities.Guild;
@@ -16,6 +17,7 @@ import java.util.List;
 
 public class SetRoleCommand extends Command {
     public SetRoleCommand() {
+        this.title = "Set Role";
         this.name = "setrole";
         this.description = "Gives the specified role a priority";
         this.usage = "<roleId> [priority]";
@@ -24,15 +26,15 @@ public class SetRoleCommand extends Command {
     }
 
     @Override
-    public void execute(MessageReceivedEvent msgEvent, CommandSystem commandSystem, List<String> args) {
+    public Failure execute(MessageReceivedEvent msgEvent, CommandSystem commandSystem, List<String> args) {
         Guild guild = msgEvent.getGuild();
         String roleId = args.get(0).replaceAll("[^0-9]", "");
         Role role = guild.getRoleById(roleId);
 
-        SimpleEmbed embed = SimpleEmbed.createSimpleEmbed("Set Role", "");
+        SimpleEmbed embed = SimpleEmbed.createSimpleEmbed(this.title, "");
 
         Integer priorityInteger = Parser.parseInt(args.get(1));
-        if (priorityInteger == null) return;
+        if (priorityInteger == null) return new Failure("The priority must be a valid number!");
 
         int priority = priorityInteger;
         Database database = commandSystem.getDatabase();
@@ -66,6 +68,7 @@ public class SetRoleCommand extends Command {
 
         embed.setDescription(updateInfo);
         messageChannel.sendMessageEmbeds(embed.build()).queue();
+        return null;
     }
 
     private void checkAndResolveConflict(Database database, int priority, DBObject roleObject) {
