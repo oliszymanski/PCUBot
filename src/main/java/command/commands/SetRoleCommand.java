@@ -27,7 +27,7 @@ public class SetRoleCommand extends Command {
     }
 
     @Override
-    public Failure execute(MessageReceivedEvent msgEvent, CommandSystem commandSystem, List<String> args) {
+    public Failure execute(@NotNull MessageReceivedEvent msgEvent, CommandSystem commandSystem, List<String> args) {
         Guild guild = msgEvent.getGuild();
         String roleId = args.get(0).replaceAll("[^0-9]", "");
         Role role = guild.getRoleById(roleId);
@@ -75,8 +75,10 @@ public class SetRoleCommand extends Command {
     private void checkAndResolveConflict(@NotNull Database database, int priority, DBObject roleObject) {
         BasicDBObject searchMap = new BasicDBObject().append("id", new BasicDBObject()
                 .append("$ne", roleObject.get("id"))); // Ensures that the query result won't be the object we've updated just now.
+
         searchMap.put("priority", priority);
         BasicDBObject searchResult = (BasicDBObject) database.getRole(searchMap);
+
 
         if (searchResult != null) {
             BasicDBObject resultUpdate = (BasicDBObject) searchResult.clone();
