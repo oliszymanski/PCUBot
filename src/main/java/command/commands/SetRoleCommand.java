@@ -1,12 +1,12 @@
 package command.commands;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import command.Command;
 import command.CommandSystem;
 import command.Failure;
 import command.Parser;
 import database.Database;
+import database.dataClasses.RoleData;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.Role;
@@ -27,7 +27,7 @@ public class SetRoleCommand extends Command {
     }
 
     @Override
-    public Failure execute(@NotNull MessageReceivedEvent msgEvent, CommandSystem commandSystem, List<String> args) {
+    public Failure execute(@NotNull MessageReceivedEvent msgEvent, CommandSystem commandSystem, List<String> args) throws CloneNotSupportedException {
         Guild guild = msgEvent.getGuild();
         String roleId = args.get(0).replaceAll("[^0-9]", "");
         Role role = guild.getRoleById(roleId);
@@ -42,28 +42,35 @@ public class SetRoleCommand extends Command {
         MessageChannel messageChannel = msgEvent.getChannel();
 
         // Basic role data
-        BasicDBObject roleObject = new BasicDBObject();
-        roleObject.put("name", role.getName());
-        roleObject.put("id", role.getId());
+        BasicDBObject roleQuery = new BasicDBObject();
+        roleQuery.put("name", role.getName());
+        roleQuery.put("id", role.getId());
 
         String updateInfo = "";
 
+        RoleData roleData = database.getRole(roleQuery);
+        if (roleData == null) {
+            roleData = new RoleData(
+                    database,
+                    role.getName(),
+                    role.getId(),
+                    priority
+            );
+        }
+
         // Handle addition
         if (priority > 0) {
-            // We create a clone of the role's data so that we can update it along with priority.
-            BasicDBObject roleUpdate = (BasicDBObject) roleObject.clone();
-            roleUpdate.put("priority", priority);
+            roleData.updateRole(priority);
 
-            database.updateRole(roleObject, roleUpdate);
-            BasicDBObject newRole = (BasicDBObject) database.getRole(roleUpdate);
-            checkAndResolveConflict(database, priority, newRole);
+            checkAndResolveConflict(database, priority, roleData);
 
             updateInfo = String.format("Succesfully set %s to %d", args.get(0), priority);
         }
 
         // Handle removal
         if (priority <= 0) {
-            database.deleteRole(roleObject);
+            roleData.deleteDocument();
+
             updateInfo = String.format("Successfully deleted role %s", args.get(0));
         }
 
@@ -72,20 +79,17 @@ public class SetRoleCommand extends Command {
         return null;
     }
 
-    private void checkAndResolveConflict(@NotNull Database database, int priority, DBObject roleObject) {
+    private void checkAndResolveConflict(@NotNull Database database, int priority, RoleData roleData) throws CloneNotSupportedException {
         BasicDBObject searchMap = new BasicDBObject().append("id", new BasicDBObject()
-                .append("$ne", roleObject.get("id"))); // Ensures that the query result won't be the object we've updated just now.
+                .append("$ne", roleData.getId())); // Ensures that the query result won't be the object we've updated just now.
 
         searchMap.put("priority", priority);
-        BasicDBObject searchResult = (BasicDBObject) database.getRole(searchMap);
-
+        RoleData searchResult = database.getRole(searchMap);
 
         if (searchResult != null) {
-            BasicDBObject resultUpdate = (BasicDBObject) searchResult.clone();
-            resultUpdate.put("priority", priority + 1);
-            database.updateRole(searchResult, resultUpdate);
+            searchResult.updateRole(priority + 1);
 
-            checkAndResolveConflict(database, priority + 1, resultUpdate);
+            checkAndResolveConflict(database, priority + 1, searchResult);
         }
     }
 }

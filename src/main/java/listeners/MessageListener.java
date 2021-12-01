@@ -20,7 +20,12 @@ public class MessageListener extends ListenerAdapter {
             // The prefix gets removed to get a "pure" query.
             String commandQuery = msg.getContentRaw().replaceFirst("!", "");
 
-            commandSystem.executeCommand(event, commandQuery);
+            // Java for gods sake why the fuck are you forcing me do to that?
+            try {
+                commandSystem.executeCommand(event, commandQuery);
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

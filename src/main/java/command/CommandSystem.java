@@ -38,7 +38,7 @@ public class CommandSystem {
         return this;
     }
 
-    public void executeCommand(@NotNull MessageReceivedEvent msgEvent, String query) {
+    public void executeCommand(@NotNull MessageReceivedEvent msgEvent, String query) throws CloneNotSupportedException {
         List<String> queryArray = new ArrayList<>(Arrays.asList(query.split(" ")));
         String potentialCommand = queryArray.get(0);
 
@@ -58,7 +58,6 @@ public class CommandSystem {
                     failure = command.execute(msgEvent, this, queryArray);
                 } else failure = new Failure("You don't have permission to do that.");
             } else {
-                // No need for an else block here, if the command requires admin and the user has no permission, it gets instantly interrupted.
                 failure = command.execute(msgEvent, this, queryArray);
             }
         }

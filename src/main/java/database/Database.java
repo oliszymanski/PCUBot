@@ -2,6 +2,7 @@ package database;
 
 import com.mongodb.*;
 import com.mongodb.client.model.DBCollectionUpdateOptions;
+import database.dataClasses.RoleData;
 
 public class Database {
     private final DB database;
@@ -18,13 +19,16 @@ public class Database {
 
     }
 
-    // Just a simple wrapper function
     // If a document doesn't exist within the database, it gets created instead.
-    private WriteResult update(DBCollection collection, DBObject filter, DBObject update) {
+    public static void update(DBCollection collection, DBObject filter, DBObject update) {
         DBCollectionUpdateOptions updateOptions = new DBCollectionUpdateOptions();
         updateOptions.upsert(true);
 
-        return collection.update(filter, update, updateOptions);
+        collection.update(filter, update, updateOptions);
+    }
+
+    public DBCollection getCollection(String name) {
+        return this.database.getCollection(name);
     }
 
     private DBObject search(DBCollection collection, DBObject searchParams) {
@@ -39,14 +43,17 @@ public class Database {
         return null;
     }
 
-    public DBObject getRole(DBObject searchParams) {
+    public RoleData getRole(DBObject searchParams) {
         DBCollection collection = this.database.getCollection("roles");
-        return search(collection, searchParams);
-    }
+        DBObject result = search(collection, searchParams);
+        if (result == null) return null;
 
-    public WriteResult updateRole(DBObject filter, DBObject update) {
-        DBCollection collection = this.database.getCollection("roles");
-        return update(collection, filter, update);
+        return new RoleData(
+                this,
+                (String) result.get("name"),
+                (String) result.get("id"),
+                (int) result.get("priority")
+        );
     }
 
     public void deleteRole(DBObject role) {
