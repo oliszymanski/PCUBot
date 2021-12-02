@@ -46,6 +46,9 @@ public class SetRoleCommand extends Command {
         roleQuery.put("name", role.getName());
         roleQuery.put("id", role.getId());
 
+//        System.out.println();
+
+
         String updateInfo = "";
 
         RoleData roleData = database.getRole(roleQuery);
@@ -64,7 +67,7 @@ public class SetRoleCommand extends Command {
 
             checkAndResolveConflict(database, priority, roleData);
 
-            updateInfo = String.format("Succesfully set %s to %d", args.get(0), priority);
+            updateInfo = String.format("Successfully set %s to %d", args.get(0), priority);
         }
 
         // Handle removal
@@ -73,7 +76,6 @@ public class SetRoleCommand extends Command {
 
             updateInfo = String.format("Successfully deleted role %s", args.get(0));
         }
-
         embed.setDescription(updateInfo);
         messageChannel.sendMessageEmbeds(embed.build()).queue();
         return null;
