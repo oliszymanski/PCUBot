@@ -1,6 +1,7 @@
 import command.CommandSystem;
 import command.commands.HelpCommand;
 import command.commands.SetRoleCommand;
+import command.commands.ShowRolesCommand;
 import listeners.MessageListener;
 
 import net.dv8tion.jda.api.JDABuilder;
@@ -17,8 +18,11 @@ public class Bot {
         }
 
         CommandSystem commandSystem = CommandSystem.createSystem(args[1])
+
+                // commands that can be used by the bot
                 .addCommand(new HelpCommand())
-                .addCommand(new SetRoleCommand());
+                .addCommand(new SetRoleCommand())
+                .addCommand(new ShowRolesCommand());
 
         JDABuilder.createLight(args[0], GatewayIntent.GUILD_MESSAGES)
                 .addEventListeners(new MessageListener(commandSystem))
