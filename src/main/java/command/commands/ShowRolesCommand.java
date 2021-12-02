@@ -16,7 +16,7 @@ public class ShowRolesCommand extends Command {
 		this.title = "Show Roles";
 		this.name = "showrole";
 		this.description = "shows a list of all available roles";
-		this.usage = "!showroles";
+		this.usage = " ";
 		this.expectedArgs = 0;
 		this.requiresAdmin = false;
 	}

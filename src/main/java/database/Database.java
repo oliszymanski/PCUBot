@@ -3,6 +3,11 @@ package database;
 import com.mongodb.*;
 import com.mongodb.client.model.DBCollectionUpdateOptions;
 import database.dataClasses.RoleData;
+import database.dataClasses.UserData;
+import org.bson.Document;
+import org.bson.types.ObjectId;
+
+import java.util.ArrayList;
 
 public class Database {
     private final DB database;
@@ -27,11 +32,16 @@ public class Database {
         collection.update(filter, update, updateOptions);
     }
 
+    // Forcefully shove a new document, even if it contains the same data.
+    public static void insert(DBCollection collection, DBObject object) {
+        collection.insert(object);
+    }
+
     public DBCollection getCollection(String name) {
         return this.database.getCollection(name);
     }
 
-    private DBObject search(DBCollection collection, DBObject searchParams) {
+    public DBObject search(DBCollection collection, DBObject searchParams) {
         BasicDBObject query = new BasicDBObject();
 
         for (String key : searchParams.keySet()) {
@@ -56,10 +66,26 @@ public class Database {
         );
     }
 
-    public void deleteRole(DBObject role) {
-        DBCollection collection = this.database.getCollection("roles");
-        if (role == null) return;
+    public UserData getUser(String userId) {
+        DBCollection collection = this.database.getCollection("users");
+        BasicDBObject user = new BasicDBObject().append("id", userId);
 
-        collection.remove(role);
+        DBObject result = search(collection, user);
+        System.out.println(result);
+
+        if (result == null) return null;
+
+        Document docResult = new Document(result.toMap());
+        ArrayList<ObjectId> warningResults = (ArrayList<ObjectId>) docResult.getList("warnings", ObjectId.class);
+
+        return new UserData(this, userId, warningResults);
     }
+
+    public UserData getOrCreateUser(String userId) {
+        UserData userData = getUser(userId);
+        if (userData == null) return UserData.createNewUser(this, userId);
+
+        return userData;
+    }
+
 }
