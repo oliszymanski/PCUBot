@@ -38,7 +38,7 @@ public class CommandSystem {
         return this;
     }
 
-    public void executeCommand(@NotNull MessageReceivedEvent msgEvent, String query) throws CloneNotSupportedException {
+    public void executeCommand(@NotNull MessageReceivedEvent msgEvent, String query) {
         List<String> queryArray = new ArrayList<>(Arrays.asList(query.split(" ")));
         String potentialCommand = queryArray.get(0);
 

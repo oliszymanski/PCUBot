@@ -20,8 +20,8 @@ public class RoleData implements Cloneable {
     }
 
     // Uncommment if needed
-    /*public void updateRole(String name, String id, int priority) throws CloneNotSupportedException {
-        RoleData clone = (RoleData) this.clone();
+    /*public void updateRole(String name, String id, int priority) {
+        RoleData clone = tryClone();
 
         this.name = name;
         this.id = id;
@@ -30,8 +30,8 @@ public class RoleData implements Cloneable {
         update(clone);
     }*/
 
-    public void updateRole(int priority) throws CloneNotSupportedException {
-        RoleData clone = (RoleData) this.clone();
+    public void updateRole(int priority) {
+        RoleData clone = tryClone();
 
         this.priority = priority;
 
@@ -45,7 +45,7 @@ public class RoleData implements Cloneable {
         dbCollection.remove(document);
     }
 
-    public String getName() { return this.name; }
+    //public String getName() { return this.name; }
     public String getId() { return this.id; }
 
     private BasicDBObject getRoleDocument() {
@@ -62,5 +62,13 @@ public class RoleData implements Cloneable {
         DBCollection roleCollection = this.database.getCollection("roles");
 
         Database.update(roleCollection, cloneObject, role);
+    }
+
+    private RoleData tryClone() {
+        try {
+            return (RoleData) this.clone();
+        } catch(Exception e) {
+            return null;
+        }
     }
 }

@@ -13,5 +13,5 @@ public abstract class Command {
     public boolean requiresAdmin;
 
 
-    public abstract Failure execute(MessageReceivedEvent msgEvent, CommandSystem commandSystem, List<String> args) throws CloneNotSupportedException;
+    public abstract Failure execute(MessageReceivedEvent msgEvent, CommandSystem commandSystem, List<String> args);
 }
