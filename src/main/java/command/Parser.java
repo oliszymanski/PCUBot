@@ -1,7 +1,7 @@
 package command;
 
 public final class Parser {
-    private Parser() {} // Makes the constructor unavailable
+    private Parser() {}         // Makes the constructor unavailable
 
     public static Integer parseInt(String string) {
         try {

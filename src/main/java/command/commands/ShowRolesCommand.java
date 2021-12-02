@@ -3,23 +3,20 @@ package command.commands;
 import command.Command;
 import command.CommandSystem;
 import command.Failure;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import widgets.SimpleEmbed;		// for discord widget
-import database.Database;		// for accessing db
-
 
 import java.util.List;
 
 
-public class ShowRoleCommand extends Command {
+public class ShowRolesCommand extends Command {
 
-	public ShowRoleCommand() {		// defining full description of the command
-		this.title = "Show Role";
+	public ShowRolesCommand() {		// defining full description of the command
+		this.title = "Show Roles";
 		this.name = "showrole";
 		this.description = "shows a list of all available roles";
-		this.usage = "";
+		this.usage = "!showroles";
 		this.expectedArgs = 0;
 		this.requiresAdmin = false;
 	}
@@ -31,6 +28,9 @@ public class ShowRoleCommand extends Command {
 		SimpleEmbed embed = SimpleEmbed.createSimpleEmbed(this.title, "");
 
 
+		// accessing collection in db
+		System.out.println(CommandSystem.getDatabase().getCollection("roles"));
+
 
 		// showing all elements
 
@@ -38,7 +38,6 @@ public class ShowRoleCommand extends Command {
 		// getting them from the db
 
 
-		// getting permission to access the db
 
 		return null;
 	}
