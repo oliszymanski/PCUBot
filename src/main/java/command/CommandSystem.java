@@ -14,11 +14,11 @@ import java.util.List;
 
 public class CommandSystem {
     private final HashMap<String, Command> commandStorage;
-    private final Database database;
+    private static Database database;
 
     public CommandSystem(String databaseAddress) {
         this.commandStorage = new HashMap<>();
-        this.database = new Database(databaseAddress);
+        database = new Database(databaseAddress);
     }
 
     // This command only exists so that chaining functions can be available immediately
@@ -27,7 +27,7 @@ public class CommandSystem {
     }
 
     public HashMap<String, Command> getCommandStorage() { return this.commandStorage; }
-    public Database getDatabase() { return this.database; }
+    public static Database getDatabase() { return database; }
 
     public Command getCommandByName(String name) {
         return this.commandStorage.get(name);
