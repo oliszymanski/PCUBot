@@ -56,8 +56,11 @@ public class CommandSystem {
                 Member member = msgEvent.getMember();
                 if (member.hasPermission(Permission.ADMINISTRATOR)) {
                     failure = command.execute(msgEvent, this, queryArray);
-                } else failure = new Failure("You don't have permission to do that.");
-            } else {
+                }
+
+                else failure = new Failure("You don't have permission to do that.");
+            }
+            else {
                 failure = command.execute(msgEvent, this, queryArray);
             }
         }
