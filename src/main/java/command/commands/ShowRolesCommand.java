@@ -33,7 +33,7 @@ public class ShowRolesCommand extends Command {
 
 
 		// showing all elements
-
+		System.out.println("Your only job is to show the roles!");
 
 		// getting them from the db
 
