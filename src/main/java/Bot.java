@@ -27,6 +27,7 @@ public class Bot {
                 .addCommand(new HelpCommand())
                 .addCommand(new SetRoleCommand());
 
+
         JDABuilder.createLight(args[0], GatewayIntent.GUILD_MESSAGES)       // main builder
                 .addEventListeners(new MessageListener(commandSystem))
                 .setActivity(Activity.playing("Creating a bot"))
