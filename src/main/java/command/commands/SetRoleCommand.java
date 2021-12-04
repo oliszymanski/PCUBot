@@ -1,20 +1,23 @@
 package command.commands;
 
-import com.mongodb.BasicDBObject;
-import command.Command;
+import java.util.List;
+import org.jetbrains.annotations.NotNull;
+
+import com.mongodb.BasicDBObject;       // for database
+import database.Database;
+import database.dataClasses.RoleData;
+
+import command.Command;         // for commands
 import command.CommandSystem;
 import command.Failure;
 import command.Parser;
-import database.Database;
-import database.dataClasses.RoleData;
-import net.dv8tion.jda.api.entities.Guild;
+
+import net.dv8tion.jda.api.entities.Guild;      // for integration with the server
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.jetbrains.annotations.NotNull;
-import widgets.SimpleEmbed;
 
-import java.util.List;
+import widgets.SimpleEmbed;
 
 public class SetRoleCommand extends Command {
     public SetRoleCommand() {
