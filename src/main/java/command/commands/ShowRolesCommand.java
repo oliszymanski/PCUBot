@@ -5,6 +5,9 @@ import command.CommandSystem;
 import command.Failure;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import database.*;		// for getting roles from database
+import database.dataClasses.RoleData;
+
 import widgets.SimpleEmbed;		// for discord widget
 
 import java.util.List;
@@ -29,14 +32,13 @@ public class ShowRolesCommand extends Command {
 
 
 		// accessing collection in db
-		System.out.println(CommandSystem.getDatabase().getCollection("roles"));
+		private List<String> getRoles(){
 
+		}
 
 		// showing all elements
-		System.out.println("Your only job is to show the roles!");
 
 		// getting them from the db
-
 
 
 		return null;
