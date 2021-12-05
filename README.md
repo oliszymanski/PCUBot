@@ -1,19 +1,19 @@
 # PCUBot
 
 ## Description
-bot.Bot for our PCU discord server
+Bot for our PCU discord server
 
 
 ## About the server
 
-Our website:
-- [ ] add a website
+PCU (Polish Commanding Union) is a Polish discord server.
 
 ## About the bot
 
 ## Milestone for 1.0.0
-- [x] Add a command system
-- [ ] Add a warning system
-- [ ] Add a leveling system
+- [x] Add a command system.
+- [ ] Add a warning system.
+- [ ] Add a complete punishment system.
+- [ ] Add a leveling system.
 
 ## Notes
