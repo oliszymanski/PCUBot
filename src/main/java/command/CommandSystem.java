@@ -19,6 +19,7 @@ public class CommandSystem {
     public CommandSystem(String databaseAddress) {
         this.commandStorage = new HashMap<>();
         database = new Database(databaseAddress);
+
     }
 
     // This command only exists so that chaining functions can be available immediately

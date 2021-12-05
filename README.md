@@ -1,7 +1,7 @@
 # PCUBot
 
 ## Description
-Bot for our PCU discord server
+bot.Bot for our PCU discord server
 
 
 ## About the server

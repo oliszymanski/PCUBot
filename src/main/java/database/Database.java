@@ -71,7 +71,6 @@ public class Database {
         BasicDBObject user = new BasicDBObject().append("id", userId);
 
         DBObject result = search(collection, user);
-        System.out.println(result);
 
         if (result == null) return null;
 

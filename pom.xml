@@ -29,7 +29,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>Bot</mainClass>
+                            <mainClass>bot.Bot</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

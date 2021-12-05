@@ -4,11 +4,7 @@ import command.Command;
 import command.CommandSystem;
 import command.Failure;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-
-import database.*;		// for getting roles from database
-import database.dataClasses.RoleData;
-
-import widgets.SimpleEmbed;		// for discord widget
+import widgets.SimpleEmbed;
 
 import java.util.List;
 
@@ -32,9 +28,9 @@ public class ShowRolesCommand extends Command {
 
 
 		// accessing collection in db
-		private List<String> getRoles(){
+		/*private List<String> getRoles(){
 
-		}
+		} this gives a compiler error uncomment it if you will work on it*/
 
 		// showing all elements
 
