@@ -28,9 +28,14 @@ public class ShowRolesCommand extends Command {
 
 
 		// accessing collection in db
-		/*private List<String> getRoles(){
+		Database database = CommandSystem.getDatabase();
+		String userRoles = String.valueOf(database.getCollection("roles"));
 
-		} this gives a compiler error uncomment it if you will work on it*/
+
+		System.out.println(userRoles);		// just for tests only
+
+
+		//this gives a compiler error uncomment it if you will work on it
 
 		// showing all elements
 
