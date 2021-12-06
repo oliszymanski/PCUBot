@@ -37,9 +37,27 @@ public class ShowRolesCommand extends Command {
 
 		//this gives a compiler error uncomment it if you will work on it
 
-		// showing all elements
 
-		// getting them from the db
+		
+		// getting them from the db			- yeah, small problem with this one
+
+
+		if (args.size() == 0){
+			// showing all elements
+			public List<String> getRoles() {
+				for (String i :) {
+					OneFieldWidget widget = new OneFieldWidget(
+							this.title,
+							"All available roles",
+							"Roles",
+							""
+					);
+				}
+
+				System.out.println("Hello there");
+
+			}
+		}
 
 
 		return null;
