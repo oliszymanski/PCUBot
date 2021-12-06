@@ -47,12 +47,8 @@ public class ShowRolesCommand extends Command {
 		if (args.size() == 0){
 			// showing all elements
 			public List<String> getRoles() {
-				for (String i :) {
-					OneFieldWidget widget = new OneFieldWidget(
-							this.title,
-							"All available roles",
-							"Roles",
-							""
+				for (int i = 0; i >= 10; i++) {
+					OneFieldWidget widget = new OneFieldWidget(this.title, "All available roles", "Roles", ""
 					);
 				}
 
