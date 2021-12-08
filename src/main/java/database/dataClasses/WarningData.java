@@ -36,5 +36,19 @@ public class WarningData {
         return new WarningData((ObjectId) search.get("_id"), database, reason, date);
     }
 
+    public void deleteDocument() {
+        BasicDBObject document = getWarningDocument();
+        DBCollection dbCollection = this.database.getCollection("warnings");
+
+        dbCollection.remove(document);
+    }
+
+    private BasicDBObject getWarningDocument() {
+        return new BasicDBObject()
+                .append("_id", this.objectId)
+                .append("reason", this.reason)
+                .append("date", this.date);
+    }
+
     public ObjectId getId() { return objectId; }
 }

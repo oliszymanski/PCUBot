@@ -4,9 +4,11 @@ import com.mongodb.*;
 import com.mongodb.client.model.DBCollectionUpdateOptions;
 import database.dataClasses.RoleData;
 import database.dataClasses.UserData;
+import database.dataClasses.WarningData;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.util.Date;
 import java.util.ArrayList;
 
 public class Database {
@@ -78,6 +80,16 @@ public class Database {
         ArrayList<ObjectId> warningResults = (ArrayList<ObjectId>) docResult.getList("warnings", ObjectId.class);
 
         return new UserData(this, userId, warningResults);
+    }
+
+    public WarningData getWarningById(ObjectId id) {
+        DBCollection collection = this.database.getCollection("warnings");
+        BasicDBObject warningQuery = new BasicDBObject("_id", id);
+
+        DBObject result = search(collection, warningQuery);
+        if (result == null) return null;
+
+        return new WarningData(id, this, (String) result.get("reason"), (Date) result.get("date"));
     }
 
     public UserData getOrCreateUser(String userId) {

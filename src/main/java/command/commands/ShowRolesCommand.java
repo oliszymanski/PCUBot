@@ -5,7 +5,6 @@ import command.CommandSystem;
 import command.Failure;
 import database.Database;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import widgets.OneFieldWidget;
 import widgets.SimpleEmbed;
 
 import java.util.List;
@@ -37,14 +36,12 @@ public class ShowRolesCommand extends Command {
 		System.out.println(userRoles);		// just for tests only
 
 
-		//this gives a compiler error uncomment it if you will work on it
-
 
 		
 		// getting them from the db			- yeah, small problem with this one
 
 
-		if (args.size() == 0){
+		/*if (args.size() == 0){
 			// showing all elements
 			public List<String> getRoles() {
 				for (int i = 0; i >= 10; i++) {
@@ -55,7 +52,7 @@ public class ShowRolesCommand extends Command {
 				System.out.println("Hello there");
 
 			}
-		}
+		} this still causes a compiler error */
 
 
 		return null;

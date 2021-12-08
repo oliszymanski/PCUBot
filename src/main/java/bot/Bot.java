@@ -1,10 +1,7 @@
 package bot;
 
 import command.CommandSystem;
-import command.commands.HelpCommand;
-import command.commands.SetRoleCommand;
-import command.commands.ShowRolesCommand;
-import command.commands.WarnCommand;
+import command.commands.*;
 import listeners.MessageListener;
 
 import net.dv8tion.jda.api.JDA;
@@ -24,13 +21,14 @@ public class Bot {
             System.exit(1);
         }
 
+        // Add new commands here
         CommandSystem commandSystem = CommandSystem.createSystem(args[1])
-
-                // bot commands that can be used by authorised users
                 .addCommand(new ShowRolesCommand())
+                .addCommand(new KickCommand())
                 .addCommand(new WarnCommand())
                 .addCommand(new HelpCommand())
-                .addCommand(new SetRoleCommand());
+                .addCommand(new SetRoleCommand())
+                .addCommand(new BanCommand());
 
 
         jda = JDABuilder.createLight(args[0], GatewayIntent.GUILD_MESSAGES)       // main builder

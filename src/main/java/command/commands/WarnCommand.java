@@ -4,13 +4,14 @@ import bot.Bot;
 import command.Command;
 import command.CommandSystem;
 import command.Failure;
-import command.Parser;
+import exceptionWrappers.Parser;
 import database.Database;
 import database.dataClasses.UserData;
 import database.dataClasses.WarningData;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import widgets.OneFieldWidget;
+import exceptionWrappers.Getter;
 
 import java.util.List;
 
@@ -26,11 +27,10 @@ public class WarnCommand extends Command {
 
     @Override
     public Failure execute(MessageReceivedEvent msgEvent, CommandSystem commandSystem, List<String> args) {
-        // TODO: Improve it later
         String userIdRaw = args.get(0);
         String userId = args.get(0).replaceAll("[^0-9]", "");
 
-        User user = tryGetUser(userId);
+        User user = Getter.getUser(userId);
         if (user == null) return new Failure("No such user found!");
 
         args.remove(0);
@@ -52,11 +52,5 @@ public class WarnCommand extends Command {
         return null;
     }
 
-    private User tryGetUser(String id) {
-        try {
-            return User.fromId(id);
-        } catch(Exception e) {
-            return null;
-        }
-    }
+
 }

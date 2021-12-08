@@ -47,6 +47,17 @@ public class UserData implements Cloneable {
         Database.update(userCollection, userDocument, query);
     }
 
+    public void deleteDocument() {
+        BasicDBObject document = getUserDocument();
+        DBCollection dbCollection = this.database.getCollection("users");
+
+        for (ObjectId id : this.warnings) {
+            this.database.getWarningById(id).deleteDocument();
+        }
+
+        dbCollection.remove(document);
+    }
+
     private BasicDBObject getUserDocument() {
         return new BasicDBObject()
                 .append("id", this.id)

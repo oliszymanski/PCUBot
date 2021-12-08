@@ -10,7 +10,7 @@ import database.dataClasses.RoleData;
 import command.Command;         // for commands
 import command.CommandSystem;
 import command.Failure;
-import command.Parser;
+import exceptionWrappers.Parser;
 
 import net.dv8tion.jda.api.entities.Guild;      // for integration with the server
 import net.dv8tion.jda.api.entities.MessageChannel;
