@@ -12,7 +12,7 @@ PCU (Polish Commanding Union) is a Polish discord server.
 
 ## Milestone for 1.0.0
 - [x] Add a command system.
-- [ ] Add a warning system.
+- [x] Add a warning system.
 - [ ] Add a complete punishment system.
 - [ ] Add a leveling system.
 
