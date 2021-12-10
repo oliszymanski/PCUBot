@@ -8,14 +8,13 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import org.jetbrains.annotations.NotNull;
 
 import javax.security.auth.login.LoginException;
 
 public class Bot {
     private static JDA jda;
 
-    public static void main(String @NotNull [] args) throws LoginException {
+    public static void main(String[] args) throws LoginException {
         if (args.length < 2) {
             System.out.println("Please ensure all arguments have been specified.");
             System.exit(1);
