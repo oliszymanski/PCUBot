@@ -51,6 +51,4 @@ public class WarnCommand extends Command {
         msgEvent.getChannel().sendMessageEmbeds(widget.build()).queue();
         return null;
     }
-
-
 }
