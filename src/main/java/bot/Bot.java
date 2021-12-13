@@ -4,6 +4,7 @@ import command.CommandSystem;
 import command.commands.*;
 import listeners.MessageListener;
 
+import listeners.ReadyListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -31,7 +32,7 @@ public class Bot {
 
 
         jda = JDABuilder.createLight(args[0], GatewayIntent.GUILD_MESSAGES)       // main builder
-                .addEventListeners(new MessageListener(commandSystem))
+                .addEventListeners(new MessageListener(commandSystem), new ReadyListener())
                 .setActivity(Activity.playing("Creating a bot"))
                 .build();
     }
