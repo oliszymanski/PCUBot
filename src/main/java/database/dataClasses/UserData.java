@@ -13,16 +13,16 @@ public class UserData implements Cloneable {
     private final Database database;
     private final String id;
     private int level;
-    private int current_exp;
-    private int exp_until_next;
+    private int currentExp;
+    private int expUntilNext;
     private final ArrayList<ObjectId> warnings;
 
     public UserData(Database database, String id, ArrayList<ObjectId> warnings, int level, int current_exp, int exp_until_next) {
         this.database = database;
         this.id = id;
         this.level = level;
-        this.current_exp = current_exp;
-        this.exp_until_next = exp_until_next;
+        this.currentExp = current_exp;
+        this.expUntilNext = exp_until_next;
         this.warnings = warnings;
     }
 
@@ -30,8 +30,8 @@ public class UserData implements Cloneable {
         this.database = database;
         this.id = id;
         this.level = 1;
-        this.current_exp = 0;
-        this.exp_until_next = calculateNextExp(1);
+        this.currentExp = 0;
+        this.expUntilNext = calculateNextExp(1);
         this.warnings = new ArrayList<>();
     }
 
@@ -40,8 +40,8 @@ public class UserData implements Cloneable {
                 .append("id", userId)
                 .append("warnings", new ArrayList<>())
                 .append("level", 1)
-                .append("current_exp", 0)
-                .append("exp_until_next", calculateNextExp(1));
+                .append("currentExp", 0)
+                .append("expUntilNext", calculateNextExp(1));
 
         DBCollection userCollection = database.getCollection("users");
         Database.update(userCollection, userObject, userObject);
@@ -54,9 +54,9 @@ public class UserData implements Cloneable {
 
         BasicDBObject userQuery = (BasicDBObject) userCollection.find(new BasicDBObject("id", this.id)).next();
 
-        this.current_exp += exp;
-        System.out.println(current_exp);
-        if (this.current_exp >= exp_until_next) levelUp();
+        this.currentExp += exp;
+        System.out.println(currentExp);
+        if (this.currentExp >= expUntilNext) levelUp();
 
         BasicDBObject query = getUserDocument();
 
@@ -93,8 +93,8 @@ public class UserData implements Cloneable {
                 .append("id", this.id)
                 .append("warnings", this.warnings)
                 .append("level", this.level)
-                .append("current_exp", this.current_exp)
-                .append("exp_until_next", this.exp_until_next);
+                .append("currentExp", this.currentExp)
+                .append("expUntilNext", this.expUntilNext);
     }
 
     public void giveExp(int exp) {
@@ -103,8 +103,8 @@ public class UserData implements Cloneable {
 
     private void levelUp() {
         this.level += 1;
-        this.current_exp = 0;
-        this.exp_until_next = calculateNextExp(this.level);
+        this.currentExp = 0;
+        this.expUntilNext = calculateNextExp(this.level);
 
         if (this.level - 1 != 0) {
             Bot.getJda().openPrivateChannelById(this.id).queue(privateChannel -> {
@@ -118,4 +118,8 @@ public class UserData implements Cloneable {
     public static int calculateNextExp(int level) {
         return (int) Math.floor(((Math.sqrt((double) level) * 25) / 4) * 10);
     }
+
+    public int getLevel() { return this.level; }
+    public int getCurrentExp() { return this.currentExp; }
+    public int getExpUntilNext() { return this.expUntilNext; }
 }

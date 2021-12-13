@@ -28,7 +28,8 @@ public class Bot {
                 .addCommand(new WarnCommand())
                 .addCommand(new HelpCommand())
                 .addCommand(new SetRoleCommand())
-                .addCommand(new BanCommand());
+                .addCommand(new BanCommand())
+                .addCommand(new LevelCommand());
 
 
         jda = JDABuilder.createLight(args[0], GatewayIntent.GUILD_MESSAGES)       // main builder

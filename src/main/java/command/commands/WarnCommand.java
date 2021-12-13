@@ -23,6 +23,7 @@ public class WarnCommand extends Command {
         this.description = "Gives the user a warning";
         this.usage = "<userId> <reason>";
         this.requiresAdmin = true;
+        this.expectedArgs = 1;
     }
 
     @Override

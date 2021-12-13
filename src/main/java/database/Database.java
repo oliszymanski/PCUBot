@@ -79,7 +79,7 @@ public class Database {
         Document docResult = new Document(result.toMap());
         ArrayList<ObjectId> warningResults = (ArrayList<ObjectId>) docResult.getList("warnings", ObjectId.class);
 
-        return new UserData(this, userId, warningResults, (int) result.get("level"), (int) result.get("current_exp"), (int) result.get("exp_until_next"));
+        return new UserData(this, userId, warningResults, (int) result.get("level"), (int) result.get("currentExp"), (int) result.get("expUntilNext"));
     }
 
     public WarningData getWarningById(ObjectId id) {
