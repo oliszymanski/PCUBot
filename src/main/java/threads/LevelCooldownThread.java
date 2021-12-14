@@ -31,6 +31,7 @@ public class LevelCooldownThread extends Thread {
                 }
 
                 removalCache.forEach(coolingDown.keySet()::remove);
+                removalCache.clear();
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
