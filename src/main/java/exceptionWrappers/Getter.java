@@ -1,6 +1,8 @@
 package exceptionWrappers;
 import net.dv8tion.jda.api.entities.User;
 
+import java.util.List;
+
 public final class Getter {
     private Getter() {}
 
@@ -12,4 +14,11 @@ public final class Getter {
         }
     }
 
+    public static String get(List<String> arrayList, int index) {
+        try {
+            return arrayList.get(index);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class Database {
     private final DB database;
 
+    @SuppressWarnings("deprecation")
     public Database(String address) {
         MongoClient mongoClient = new MongoClient(address, 27017);
         if (mongoClient == null) {
@@ -21,9 +22,7 @@ public class Database {
             System.exit(1);
         }
 
-        // Ignore the deprecation warning.
         this.database = mongoClient.getDB("PCUBot");
-
     }
 
     // If a document doesn't exist within the database, it gets created instead.
@@ -55,17 +54,33 @@ public class Database {
         return null;
     }
 
-    public RoleData getRole(DBObject searchParams) {
+    public RoleData getRole(String roleId) {
         DBCollection collection = this.database.getCollection("roles");
-        DBObject result = search(collection, searchParams);
+        BasicDBObject role = new BasicDBObject().append("id", roleId);
+
+        DBObject result = search(collection, role);
+
         if (result == null) return null;
 
-        return new RoleData(
-                this,
-                (String) result.get("name"),
-                (String) result.get("id"),
-                (int) result.get("priority")
-        );
+        return new RoleData(this, (String) result.get("name"), roleId, (int) result.get("requiredLevel"));
+    }
+
+    public RoleData getRole(int level) {
+        DBCollection collection = this.database.getCollection("roles");
+        BasicDBObject role = new BasicDBObject().append("requiredLevel", level);
+
+        DBObject result = search(collection, role);
+
+        if (result == null) return null;
+
+        return new RoleData(this, (String) result.get("name"), (String) result.get("id"), (int) result.get("requiredLevel"));
+    }
+
+    public RoleData getOrCreateRole(String roleId, String name) {
+        RoleData roleData = getRole(roleId);
+        if (roleData == null) return RoleData.createNewRole(this, roleId, name);
+
+        return roleData;
     }
 
     public UserData getUser(String userId) {
@@ -76,10 +91,12 @@ public class Database {
 
         if (result == null) return null;
 
+        // Suppress because there is no good way to solve this warning
+        @SuppressWarnings("unchecked")
         Document docResult = new Document(result.toMap());
         ArrayList<ObjectId> warningResults = (ArrayList<ObjectId>) docResult.getList("warnings", ObjectId.class);
 
-        return new UserData(this, userId, warningResults, (int) result.get("level"), (int) result.get("currentExp"), (int) result.get("expUntilNext"));
+        return new UserData(this, userId, warningResults, (int) result.get("level"), (int) result.get("currentExp"), (int) result.get("expUntilNext"), (int) result.get("warningsUntilPunishment"));
     }
 
     public WarningData getWarningById(ObjectId id) {

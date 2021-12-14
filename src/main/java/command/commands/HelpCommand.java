@@ -10,8 +10,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import java.util.List;
 
 public class HelpCommand extends Command {
-    private EmbedBuilder embedBuilder;
-
     public HelpCommand() {
         this.title = "Help";
         this.name = "help";
@@ -23,19 +21,19 @@ public class HelpCommand extends Command {
 
     @Override
     public Failure execute(MessageReceivedEvent msgEvent, CommandSystem commandSystem, List<String> args) {
-        this.embedBuilder = new EmbedBuilder();
-        this.embedBuilder.setTitle(this.title);
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setTitle(this.title);
 
         if (args.size() > 0) {
-            CommandSystem.getCommandHelp(args.get(0), commandSystem, this.embedBuilder);
+            CommandSystem.getCommandHelp(args.get(0), commandSystem, embedBuilder);
         } else {
             for (String name : commandSystem.getCommandStorage().keySet()) {
-                CommandSystem.getCommandHelp(name, commandSystem, this.embedBuilder);
+                CommandSystem.getCommandHelp(name, commandSystem, embedBuilder);
             }
         }
 
         MessageChannel messageChannel = msgEvent.getChannel();
-        messageChannel.sendMessageEmbeds(this.embedBuilder.build()).queue();
+        messageChannel.sendMessageEmbeds(embedBuilder.build()).queue();
         return null;
     }
 

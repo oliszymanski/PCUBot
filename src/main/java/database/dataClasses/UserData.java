@@ -4,25 +4,30 @@ import bot.Bot;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import database.Database;
+import net.dv8tion.jda.api.entities.Guild;
 import org.bson.types.ObjectId;
 import widgets.SimpleEmbed;
 
 import java.util.ArrayList;
 
-public class UserData implements Cloneable {
+public class UserData {
     private final Database database;
     private final String id;
     private int level;
     private int currentExp;
     private int expUntilNext;
+    private int warningsUntilPunishment;
     private final ArrayList<ObjectId> warnings;
 
-    public UserData(Database database, String id, ArrayList<ObjectId> warnings, int level, int current_exp, int exp_until_next) {
+    private static final int DEFAULT_WARNINGS = 2;
+
+    public UserData(Database database, String id, ArrayList<ObjectId> warnings, int level, int currentExp, int expUntilNext, int warningsUntilPunishment) {
         this.database = database;
         this.id = id;
         this.level = level;
-        this.currentExp = current_exp;
-        this.expUntilNext = exp_until_next;
+        this.currentExp = currentExp;
+        this.expUntilNext = expUntilNext;
+        this.warningsUntilPunishment = warningsUntilPunishment;
         this.warnings = warnings;
     }
 
@@ -32,6 +37,7 @@ public class UserData implements Cloneable {
         this.level = 1;
         this.currentExp = 0;
         this.expUntilNext = calculateNextExp(1);
+        this.warningsUntilPunishment = DEFAULT_WARNINGS;
         this.warnings = new ArrayList<>();
     }
 
@@ -39,6 +45,7 @@ public class UserData implements Cloneable {
         BasicDBObject userObject = new BasicDBObject()
                 .append("id", userId)
                 .append("warnings", new ArrayList<>())
+                .append("warningsUntilPunishment", DEFAULT_WARNINGS)
                 .append("level", 1)
                 .append("currentExp", 0)
                 .append("expUntilNext", calculateNextExp(1));
@@ -49,32 +56,24 @@ public class UserData implements Cloneable {
         return new UserData(database, userId);
     }
 
-    private void update(int exp) {
+    private void updateDocument() {
         DBCollection userCollection = database.getCollection("users");
 
         BasicDBObject userQuery = (BasicDBObject) userCollection.find(new BasicDBObject("id", this.id)).next();
 
-        this.currentExp += exp;
-        System.out.println(currentExp);
-        if (this.currentExp >= expUntilNext) levelUp();
-
         BasicDBObject query = getUserDocument();
-
 
         Database.update(userCollection, userQuery, query);
-
     }
 
-    // TODO: Refactor this later
     public void addWarning(WarningData warningData) {
-        DBCollection userCollection = database.getCollection("users");
-
-        BasicDBObject userDocument = (BasicDBObject) userCollection.find(getUserDocument()).next();
-
         this.warnings.add(warningData.getId());
-        BasicDBObject query = getUserDocument();
-
-        Database.update(userCollection, userDocument, query);
+        this.warningsUntilPunishment--;
+        if (this.warningsUntilPunishment == 0) {
+            this.warningsUntilPunishment = DEFAULT_WARNINGS;
+            // Take away the user's role and set back their level here.
+        }
+        updateDocument();
     }
 
     public void deleteDocument() {
@@ -91,17 +90,20 @@ public class UserData implements Cloneable {
     private BasicDBObject getUserDocument() {
         return new BasicDBObject()
                 .append("id", this.id)
+                .append("warningsUntilPunishment", this.warningsUntilPunishment)
                 .append("warnings", this.warnings)
                 .append("level", this.level)
                 .append("currentExp", this.currentExp)
                 .append("expUntilNext", this.expUntilNext);
     }
 
-    public void giveExp(int exp) {
-        update(exp);
+    public void giveExp(int exp, Guild guild) {
+        this.currentExp += exp;
+        if (this.currentExp >= expUntilNext) levelUp(guild);
+        updateDocument();
     }
 
-    private void levelUp() {
+    private void levelUp(Guild guild) {
         this.level += 1;
         this.currentExp = 0;
         this.expUntilNext = calculateNextExp(this.level);
@@ -113,10 +115,15 @@ public class UserData implements Cloneable {
                 privateChannel.sendMessageEmbeds(simpleEmbed.build()).queue();
             });
         }
+
+        RoleData role = database.getRole(this.level);
+        if (role != null) {
+            guild.addRoleToMember(this.id, guild.getRoleById(role.getId())).queue();
+        }
     }
 
     public static int calculateNextExp(int level) {
-        return (int) Math.floor(((Math.sqrt((double) level) * 25) / 4) * 10);
+        return (int) Math.floor(((Math.sqrt(level) * 25) / 4) * 10);
     }
 
     public int getLevel() { return this.level; }

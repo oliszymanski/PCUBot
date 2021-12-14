@@ -5,37 +5,42 @@ import com.mongodb.DBCollection;
 import database.Database;
 import org.jetbrains.annotations.NotNull;
 
-public class RoleData implements Cloneable {
+public class RoleData {
     private final Database database;
 
     private final String name;
     private final String id;
-    private int priority;
+    private int requiredLevel;
 
-    public RoleData(@NotNull Database database, @NotNull String name, @NotNull String id, int priority) {
+    public RoleData(@NotNull Database database, @NotNull String name, @NotNull String id, int requiredLevel) {
         this.database = database;
         this.name = name;
         this.id = id;
-        this.priority = priority;
+        this.requiredLevel = requiredLevel;
     }
 
-    // Uncommment if needed
-    /*public void updateRole(String name, String id, int priority) {
-        RoleData clone = tryClone();
-
+    public RoleData(@NotNull Database database, @NotNull String name, @NotNull String id) {
+        this.database = database;
         this.name = name;
         this.id = id;
-        this.priority = priority;
+        this.requiredLevel = 1;
+    }
 
-        update(clone);
-    }*/
+    public static RoleData createNewRole(Database database, String roleId, String name) {
+        BasicDBObject userObject = new BasicDBObject()
+                .append("name", name)
+                .append("id", roleId)
+                .append("requiredLevel", 1);
 
-    public void updateRole(int priority) {
-        RoleData clone = tryClone();
+        DBCollection userCollection = database.getCollection("roles");
+        Database.update(userCollection, userObject, userObject);
 
-        this.priority = priority;
+        return new RoleData(database, name, roleId);
+    }
 
-        update(clone);
+    public void setLevel(int level) {
+        this.requiredLevel = level;
+        updateDocument();
     }
 
     public void deleteDocument() {
@@ -52,23 +57,16 @@ public class RoleData implements Cloneable {
         return new BasicDBObject()
                 .append("name", this.name)
                 .append("id", this.id)
-                .append("priority", this.priority);
+                .append("requiredLevel", this.requiredLevel);
     }
 
-    private void update(RoleData clone) {
-        BasicDBObject cloneObject = clone.getRoleDocument();
-        BasicDBObject role = this.getRoleDocument();
-
+    private void updateDocument() {
         DBCollection roleCollection = this.database.getCollection("roles");
 
-        Database.update(roleCollection, cloneObject, role);
-    }
+        BasicDBObject roleQuery = (BasicDBObject) roleCollection.find(new BasicDBObject("id", this.id)).next();
 
-    private RoleData tryClone() {
-        try {
-            return (RoleData) this.clone();
-        } catch(Exception e) {
-            return null;
-        }
+        BasicDBObject update = getRoleDocument();
+
+        Database.update(roleCollection, roleQuery, update);
     }
 }

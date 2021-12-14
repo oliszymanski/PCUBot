@@ -28,7 +28,7 @@ public class LevelCommand extends Command {
     public Failure execute(MessageReceivedEvent msgEvent, CommandSystem commandSystem, List<String> args) {
         User user = msgEvent.getAuthor();
 
-        String userIdRaw = safeGet(args, 0);
+        String userIdRaw = Getter.get(args, 0);
         if (userIdRaw != null) {
             String userId = args.get(0).replaceAll("[^0-9]", "");
             user = Getter.getUser(userId);
@@ -60,11 +60,5 @@ public class LevelCommand extends Command {
         return null;
     }
 
-    private String safeGet(List<String> arrayList, int index) {
-        try {
-            return arrayList.get(index);
-        } catch (Exception e) {
-            return null;
-        }
-    }
+
 }
