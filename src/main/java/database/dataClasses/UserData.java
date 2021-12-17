@@ -147,4 +147,12 @@ public class UserData {
     public int getLevel() { return this.level; }
     public int getCurrentExp() { return this.currentExp; }
     public int getExpUntilNext() { return this.expUntilNext; }
+
+    public ArrayList<WarningData> getAllWarnings() {
+        ArrayList<WarningData> warningData = new ArrayList<>();
+        for (ObjectId objectId : this.warnings) {
+            warningData.add(this.database.getWarningById(objectId));
+        }
+        return warningData;
+    }
 }

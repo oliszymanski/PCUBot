@@ -5,6 +5,7 @@ import com.mongodb.DBCollection;
 import database.Database;
 import org.bson.types.ObjectId;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 
@@ -50,5 +51,11 @@ public class WarningData {
                 .append("date", this.date);
     }
 
-    public ObjectId getId() { return objectId; }
+    public ObjectId getId() { return this.objectId; }
+    public String getReason() { return this.reason; }
+
+    public String getDateFormatted() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        return dateFormat.format(this.date);
+    }
 }

@@ -50,7 +50,7 @@ public class RoleData {
         dbCollection.remove(document);
     }
 
-    //public String getName() { return this.name; }
+    public String getName() { return this.name; }
     public String getId() { return this.id; }
     public int getRequiredLevel() { return this.requiredLevel; }
 

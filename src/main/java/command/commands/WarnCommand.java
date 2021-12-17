@@ -38,14 +38,18 @@ public class WarnCommand extends Command {
 
         Database database = CommandSystem.getDatabase();
         String reason = Parser.parseString(args);
+        if (reason.equals("")) {
+            reason = "No reason given";
+        }
 
         OneFieldWidget widget = new OneFieldWidget(this.title, String.format("Successfully warned %s", userIdRaw), "Reason", reason);
         UserData userData = database.getOrCreateUser(user.getId());
         WarningData warningData = WarningData.createNewWarning(database, reason);
 
         userData.addWarning(warningData, msgEvent.getGuild());
+        String finalReason = reason;
         Bot.getJda().openPrivateChannelById(userId).queue(channel -> {      // writes a message to a warned user
-            OneFieldWidget privateWidget = new OneFieldWidget("Warning", "You have received a warning.", "Reason", reason);
+            OneFieldWidget privateWidget = new OneFieldWidget("Warning", "You have received a warning.", "Reason", finalReason);
             channel.sendMessageEmbeds(privateWidget.build()).queue();
         });
 

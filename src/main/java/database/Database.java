@@ -76,6 +76,18 @@ public class Database {
         return new RoleData(this, (String) result.get("name"), (String) result.get("id"), (int) result.get("requiredLevel"));
     }
 
+    public ArrayList<RoleData> getAllRoles() {
+        DBCollection collection = this.database.getCollection("roles");
+
+        DBCursor results = collection.find().sort(new BasicDBObject("requiredLevel", -1));
+        ArrayList<RoleData> roleList = new ArrayList<>();
+        while (results.hasNext()) {
+            DBObject result = results.next();
+            roleList.add(new RoleData(this, (String) result.get("name"), (String) result.get("id"), (int) result.get("requiredLevel")));
+        }
+        return roleList;
+    }
+
     public ArrayList<RoleData> getRolesLte(int level) {
         DBCollection collection = this.database.getCollection("roles");
         BasicDBObject role = new BasicDBObject("requiredLevel", new BasicDBObject("$lte", level));

@@ -20,6 +20,6 @@ public final class Parser {
             stringBuilder.append(string).append(" ");
         }
 
-        return stringBuilder.toString();
+        return stringBuilder.toString().trim();
     }
 }
