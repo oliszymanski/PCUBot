@@ -52,6 +52,7 @@ public class RoleData {
 
     //public String getName() { return this.name; }
     public String getId() { return this.id; }
+    public int getRequiredLevel() { return this.requiredLevel; }
 
     private BasicDBObject getRoleDocument() {
         return new BasicDBObject()

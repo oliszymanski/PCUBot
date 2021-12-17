@@ -49,6 +49,7 @@ public class SetRoleCommand extends Command {
         // Handle addition
         if (level > 0) {
             if (level > MAXIMUM_LEVEL) return new Failure(String.format("Please set a level below the maximum level %d", MAXIMUM_LEVEL));
+            if (database.getRole(level) != null) return new Failure("A role with this level already exists!");
             roleData.setLevel(level);
 
             updateInfo = String.format("Successfully set %s to %d", args.get(0), level);

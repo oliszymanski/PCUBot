@@ -80,7 +80,7 @@ public class Database {
         DBCollection collection = this.database.getCollection("roles");
         BasicDBObject role = new BasicDBObject("requiredLevel", new BasicDBObject("$lte", level));
 
-        DBCursor results = collection.find(role);
+        DBCursor results = collection.find(role).sort(new BasicDBObject("requiredLevel", -1));
         ArrayList<RoleData> roleList = new ArrayList<>();
         while (results.hasNext()) {
             DBObject result = results.next();

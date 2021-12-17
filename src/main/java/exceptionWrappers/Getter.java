@@ -14,7 +14,7 @@ public final class Getter {
         }
     }
 
-    public static String get(List<String> arrayList, int index) {
+    public static <T> T get(List<T> arrayList, int index) {
         try {
             return arrayList.get(index);
         } catch (Exception e) {

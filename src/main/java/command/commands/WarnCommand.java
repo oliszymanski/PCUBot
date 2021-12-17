@@ -43,7 +43,7 @@ public class WarnCommand extends Command {
         UserData userData = database.getOrCreateUser(user.getId());
         WarningData warningData = WarningData.createNewWarning(database, reason);
 
-        userData.addWarning(warningData);
+        userData.addWarning(warningData, msgEvent.getGuild());
         Bot.getJda().openPrivateChannelById(userId).queue(channel -> {      // writes a message to a warned user
             OneFieldWidget privateWidget = new OneFieldWidget("Warning", "You have received a warning.", "Reason", reason);
             channel.sendMessageEmbeds(privateWidget.build()).queue();

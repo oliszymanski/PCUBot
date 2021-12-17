@@ -4,6 +4,7 @@ import bot.Bot;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import database.Database;
+import exceptionWrappers.Getter;
 import net.dv8tion.jda.api.entities.Guild;
 import org.bson.types.ObjectId;
 import widgets.SimpleEmbed;
@@ -66,12 +67,25 @@ public class UserData {
         Database.update(userCollection, userQuery, query);
     }
 
-    public void addWarning(WarningData warningData) {
+    public void addWarning(WarningData warningData, Guild guild) {
         this.warnings.add(warningData.getId());
         this.warningsUntilPunishment--;
         if (this.warningsUntilPunishment == 0) {
             this.warningsUntilPunishment = DEFAULT_WARNINGS;
-            // Take away the user's role and set back their level here.
+            ArrayList<RoleData> roles = database.getRolesLte(this.level);
+            if (!roles.isEmpty()) {
+                guild.removeRoleFromMember(this.id, guild.getRoleById(roles.get(0).getId())).queue();
+                RoleData secondRole = Getter.get(roles, 1);
+                if (secondRole != null) {
+                    setLevel(secondRole.getRequiredLevel(), guild);
+                } else {
+                    setLevel(1, guild);
+                }
+            }
+
+            Bot.getJda().openPrivateChannelById(this.id).queue(privateChannel -> privateChannel
+                    .sendMessageEmbeds(new SimpleEmbed("Warning", "as a result of getting too many warnings, your level and rank has been set back.").build())
+                    .queue());
         }
         updateDocument();
     }
@@ -103,10 +117,19 @@ public class UserData {
         updateDocument();
     }
 
-    private void levelUp(Guild guild) {
-        this.level += 1;
+    public void setLevel(int level, Guild guild) {
+        this.level = level;
         this.currentExp = 0;
         this.expUntilNext = calculateNextExp(this.level);
+
+        ArrayList<RoleData> role = database.getRolesLte(this.level);
+        for (RoleData roleData : role) {
+            guild.addRoleToMember(this.id, guild.getRoleById(roleData.getId())).queue();
+        }
+    }
+
+    private void levelUp(Guild guild) {
+        setLevel(this.level + 1, guild);
 
         if (this.level - 1 != 0) {
             Bot.getJda().openPrivateChannelById(this.id).queue(privateChannel -> {
@@ -114,11 +137,6 @@ public class UserData {
                 SimpleEmbed simpleEmbed = new SimpleEmbed("Level Up", widgetText);
                 privateChannel.sendMessageEmbeds(simpleEmbed.build()).queue();
             });
-        }
-
-        ArrayList<RoleData> role = database.getRolesLte(this.level);
-        for (RoleData roleData : role) {
-            guild.addRoleToMember(this.id, guild.getRoleById(roleData.getId())).queue();
         }
     }
 
