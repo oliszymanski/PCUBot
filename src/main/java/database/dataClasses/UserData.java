@@ -116,9 +116,9 @@ public class UserData {
             });
         }
 
-        RoleData role = database.getRole(this.level);
-        if (role != null) {
-            guild.addRoleToMember(this.id, guild.getRoleById(role.getId())).queue();
+        ArrayList<RoleData> role = database.getRolesLte(this.level);
+        for (RoleData roleData : role) {
+            guild.addRoleToMember(this.id, guild.getRoleById(roleData.getId())).queue();
         }
     }
 
