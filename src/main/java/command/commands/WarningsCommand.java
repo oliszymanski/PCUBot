@@ -29,7 +29,7 @@ public class WarningsCommand extends Command {
         String userId = args.get(0).replaceAll("[^0-9]", "");
 
         Database database = CommandSystem.getDatabase();
-        UserData userData = database.getUser(userId);
+        UserData userData = database.getOrCreateUser(userId);
         ArrayList<WarningData> warnings = userData.getAllWarnings();
 
         String description = String.format("Warnings for %s", userIdRaw);
