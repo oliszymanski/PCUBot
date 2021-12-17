@@ -1,5 +1,6 @@
 package command.commands;
 
+import bot.Bot;
 import command.Command;
 import command.CommandSystem;
 import command.Failure;
@@ -28,7 +29,7 @@ public class WarningsCommand extends Command {
         String userIdRaw = args.get(0);
         String userId = args.get(0).replaceAll("[^0-9]", "");
 
-        Database database = CommandSystem.getDatabase();
+        Database database = Bot.getDatabase();
         UserData userData = database.getOrCreateUser(userId);
         ArrayList<WarningData> warnings = userData.getAllWarnings();
 

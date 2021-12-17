@@ -1,6 +1,5 @@
 package command;
 
-import database.Database;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -14,21 +13,17 @@ import java.util.List;
 
 public class CommandSystem {
     private final HashMap<String, Command> commandStorage;
-    private static Database database;
 
-    public CommandSystem(String databaseAddress) {
+    public CommandSystem() {
         this.commandStorage = new HashMap<>();
-        database = new Database(databaseAddress);
-
     }
 
     // This command only exists so that chaining functions can be available immediately
-    public static CommandSystem createSystem(String databaseAddress) {
-        return new CommandSystem(databaseAddress);
+    public static CommandSystem createSystem() {
+        return new CommandSystem();
     }
 
     public HashMap<String, Command> getCommandStorage() { return this.commandStorage; }
-    public static Database getDatabase() { return database; }
 
     public Command getCommandByName(String name) {
         return this.commandStorage.get(name);

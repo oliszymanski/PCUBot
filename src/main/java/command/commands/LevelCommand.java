@@ -43,7 +43,7 @@ public class LevelCommand extends Command {
         Bot.getJda().retrieveUserById(user.getId()).map(User::getName).queue(userName -> {
             String title = String.format("Level: %s", userName);
 
-            Database database = CommandSystem.getDatabase();
+            Database database = Bot.getDatabase();
             UserData userData = database.getOrCreateUser(finalUser.getId());
 
             String description = String.format("Current Level: %d", userData.getLevel());

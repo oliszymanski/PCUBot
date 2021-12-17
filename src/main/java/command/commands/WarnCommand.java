@@ -36,7 +36,7 @@ public class WarnCommand extends Command {
 
         args.remove(0);
 
-        Database database = CommandSystem.getDatabase();
+        Database database = Bot.getDatabase();
         String reason = Parser.parseString(args);
         if (reason.equals("")) {
             reason = "No reason given";

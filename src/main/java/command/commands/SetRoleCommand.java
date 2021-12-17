@@ -1,5 +1,6 @@
 package command.commands;
 
+import bot.Bot;
 import command.Command;
 import command.CommandSystem;
 import command.Failure;
@@ -39,7 +40,7 @@ public class SetRoleCommand extends Command {
         if (levelInteger == null) return new Failure("The priority must be a valid number!");
 
         int level = levelInteger;
-        Database database = CommandSystem.getDatabase();
+        Database database = Bot.getDatabase();
         MessageChannel messageChannel = msgEvent.getChannel();
 
         String updateInfo = "";

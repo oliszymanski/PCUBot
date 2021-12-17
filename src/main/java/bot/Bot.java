@@ -2,6 +2,7 @@ package bot;
 
 import command.CommandSystem;
 import command.commands.*;
+import database.Database;
 import listeners.MessageListener;
 
 import listeners.ReadyListener;
@@ -14,6 +15,7 @@ import javax.security.auth.login.LoginException;
 
 public class Bot {
     private static JDA jda;
+    private static Database database;
 
     public static void main(String[] args) throws LoginException {
         if (args.length < 2) {
@@ -22,7 +24,8 @@ public class Bot {
         }
 
         // Add new commands here
-        CommandSystem commandSystem = CommandSystem.createSystem(args[1])
+        database = new Database(args[1]);
+        CommandSystem commandSystem = CommandSystem.createSystem()
                 .addCommand(new ShowRolesCommand())
                 .addCommand(new KickCommand())
                 .addCommand(new WarnCommand())
@@ -40,4 +43,5 @@ public class Bot {
     }
 
     public static JDA getJda() { return jda; }
+    public static Database getDatabase() { return database; }
 }

@@ -34,7 +34,7 @@ public class BanCommand extends Command {
 
         args.remove(0);
 
-        Database database = CommandSystem.getDatabase();
+        Database database = Bot.getDatabase();
         String reason = (!args.isEmpty()) ? Parser.parseString(args) : null;
 
         Bot.getJda().openPrivateChannelById(userId).queue(privateChannel -> {

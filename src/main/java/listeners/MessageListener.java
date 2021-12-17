@@ -1,5 +1,6 @@
 package listeners;
 
+import bot.Bot;
 import command.CommandSystem;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -34,7 +35,7 @@ public class MessageListener extends ListenerAdapter {
             HashMap<String, Integer> coolingDown = LevelCooldownThread.getCoolingDown();
             if (!coolingDown.containsKey(authorId)) {
                 int EXP_REWARD = 12;
-                CommandSystem.getDatabase().getOrCreateUser(authorId).giveExp(EXP_REWARD, event.getGuild());
+                Bot.getDatabase().getOrCreateUser(authorId).giveExp(EXP_REWARD, event.getGuild());
                 System.out.printf("User %s has been awarded EXP.\n", authorId);
                 coolingDown.put(authorId, 10);
             } else {

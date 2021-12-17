@@ -1,5 +1,6 @@
 package command.commands;
 
+import bot.Bot;
 import command.Command;
 import command.CommandSystem;
 import command.Failure;
@@ -29,7 +30,7 @@ public class ShowRolesCommand extends Command {
 
 		EmbedBuilder embedBuilder = new EmbedBuilder().setTitle(this.title);
 
-		Database database = CommandSystem.getDatabase();
+		Database database = Bot.getDatabase();
 		ArrayList<RoleData> roles = database.getAllRoles();
 
 		if (!roles.isEmpty()) {
