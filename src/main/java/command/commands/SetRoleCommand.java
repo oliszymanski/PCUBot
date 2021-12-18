@@ -26,6 +26,7 @@ public class SetRoleCommand extends Command {
         this.usage = "<roleId> [level]";
         this.expectedArgs = 2;
         this.requiresAdmin = true;
+        this.requiresOwner = false;
     }
 
     @Override

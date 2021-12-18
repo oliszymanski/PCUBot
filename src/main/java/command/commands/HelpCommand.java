@@ -17,6 +17,7 @@ public class HelpCommand extends Command {
         this.usage = "{<command>}";
         this.expectedArgs = 0;
         this.requiresAdmin = false;
+        this.requiresOwner = false;
     }
 
     @Override

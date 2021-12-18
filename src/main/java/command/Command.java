@@ -11,6 +11,7 @@ public abstract class Command {
     public String usage;
     public int expectedArgs;
     public boolean requiresAdmin;
+    public boolean requiresOwner;
 
 
     public abstract Failure execute(MessageReceivedEvent msgEvent, CommandSystem commandSystem, List<String> args);

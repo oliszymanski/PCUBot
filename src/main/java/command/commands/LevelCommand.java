@@ -21,6 +21,7 @@ public class LevelCommand extends Command {
         this.usage = "{<userId>}";
         this.expectedArgs = 0;
         this.requiresAdmin = false;
+        this.requiresOwner = false;
     }
 
 

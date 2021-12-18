@@ -46,9 +46,16 @@ public class CommandSystem {
         if (command == null) return;
         Failure failure = (queryArray.size() < command.expectedArgs) ? Failure.createFailure("Not enough arguments") : null;
 
+        // Are you coding, son?
         if (failure == null) {
             // Check for permission
-            if (command.requiresAdmin) {
+            if (command.requiresOwner) {
+                Member member = msgEvent.getMember();
+                if (member.isOwner()) {
+                    failure = command.execute(msgEvent, this, queryArray);
+                }
+                else failure = new Failure("You must be a server owner to do that.");
+            } else if (command.requiresAdmin) {
                 Member member = msgEvent.getMember();
                 if (member.hasPermission(Permission.ADMINISTRATOR)) {
                     failure = command.execute(msgEvent, this, queryArray);

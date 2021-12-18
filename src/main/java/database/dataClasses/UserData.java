@@ -6,6 +6,7 @@ import com.mongodb.DBCollection;
 import database.Database;
 import exceptionWrappers.Getter;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.bson.types.ObjectId;
 import widgets.SimpleEmbed;
 
@@ -132,11 +133,18 @@ public class UserData {
         setLevel(this.level + 1, guild);
 
         if (this.level - 1 != 0) {
-            Bot.getJda().openPrivateChannelById(this.id).queue(privateChannel -> {
-                String widgetText = String.format("Your level has advanced from %d to %d!", this.level - 1, this.level);
-                SimpleEmbed simpleEmbed = new SimpleEmbed("Level Up", widgetText);
-                privateChannel.sendMessageEmbeds(simpleEmbed.build()).queue();
-            });
+            String widgetText = String.format("Your level has advanced from %d to %d!", this.level - 1, this.level);
+            SimpleEmbed simpleEmbed = new SimpleEmbed("Level Up", widgetText);
+            Bot.getJda().openPrivateChannelById(this.id).queue(privateChannel -> privateChannel.sendMessageEmbeds(simpleEmbed.build()).queue());
+
+            SettingsData settingsData = Bot.getDatabase().getOrCreateSettings(guild.getId());
+            String levelUpChannelId = settingsData.getLevelUpChannelId();
+            if (levelUpChannelId != null && !levelUpChannelId.equals("")) {
+                TextChannel levelUpChannel = guild.getTextChannelById(levelUpChannelId);
+                String userId = String.format("<@%s>", this.id);
+                String updatedText = String.format("%s Level has advanced from %d to %d!", userId, this.level - 1, this.level);
+                levelUpChannel.sendMessageEmbeds(simpleEmbed.setDescription(updatedText).build()).queue();
+            }
         }
     }
 

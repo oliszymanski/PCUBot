@@ -23,6 +23,7 @@ public class ShowRolesCommand extends Command {
 		this.usage = " ";
 		this.expectedArgs = 0;
 		this.requiresAdmin = false;
+		this.requiresOwner = false;
 	}
 
 	@Override

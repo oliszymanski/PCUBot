@@ -22,6 +22,7 @@ public class WarningsCommand extends Command {
         this.usage = "<userId>";
         this.expectedArgs = 1;
         this.requiresAdmin = true;
+        this.requiresOwner = false;
     }
 
     @Override

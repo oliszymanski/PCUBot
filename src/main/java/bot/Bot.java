@@ -6,6 +6,8 @@ import database.Database;
 import listeners.MessageListener;
 
 import listeners.ReadyListener;
+import listeners.UserJoinListener;
+import listeners.UserLeaveListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -33,11 +35,17 @@ public class Bot {
                 .addCommand(new SetRoleCommand())
                 .addCommand(new BanCommand())
                 .addCommand(new LevelCommand())
-                .addCommand(new WarningsCommand());
+                .addCommand(new WarningsCommand())
+                .addCommand(new SetWelcomeChannelCommand())
+                .addCommand(new SetGoodbyeChannelCommand())
+                .addCommand(new SetLevelUpChannelCommand());
 
-
-        jda = JDABuilder.createLight(args[0], GatewayIntent.GUILD_MESSAGES)       // main builder
-                .addEventListeners(new MessageListener(commandSystem), new ReadyListener())
+        jda = JDABuilder.createLight(args[0], GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS)       // main builder
+                .addEventListeners(
+                        new MessageListener(commandSystem),
+                        new ReadyListener(),
+                        new UserJoinListener(),
+                        new UserLeaveListener())
                 .setActivity(Activity.playing("Creating a bot"))
                 .build();
     }

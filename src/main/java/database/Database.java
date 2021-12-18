@@ -3,6 +3,7 @@ package database;
 import com.mongodb.*;
 import com.mongodb.client.model.DBCollectionUpdateOptions;
 import database.dataClasses.RoleData;
+import database.dataClasses.SettingsData;
 import database.dataClasses.UserData;
 import database.dataClasses.WarningData;
 import org.bson.Document;
@@ -139,6 +140,23 @@ public class Database {
         if (userData == null) return UserData.createNewUser(this, userId);
 
         return userData;
+    }
+
+    public SettingsData getSettings(String guildId) {
+        DBCollection collection = this.database.getCollection("settings");
+        BasicDBObject settingsQuery = new BasicDBObject("guildId", guildId);
+
+        DBObject result = search(collection, settingsQuery);
+        if (result == null) return null;
+
+        return new SettingsData(guildId, (String) result.get("welcomeChannelId"), (String) result.get("goodbyeChannelId"), (String) result.get("levelUpChannelId"));
+    }
+
+    public SettingsData getOrCreateSettings(String guildId) {
+        SettingsData settingsData = getSettings(guildId);
+        if (settingsData == null) return SettingsData.createNewSettings(guildId);
+
+        return settingsData;
     }
 
 }

@@ -22,6 +22,7 @@ public class KickCommand extends Command {
         this.usage = "<userId> {<reason>}";
         this.expectedArgs = 1;
         this.requiresAdmin = true;
+        this.requiresOwner = false;
     }
 
     @Override
