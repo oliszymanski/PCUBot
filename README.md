@@ -10,10 +10,8 @@ PCU (Polish Commanding Union) is a Polish discord server.
 
 ## About the bot
 
-## Milestone for 1.0.0
-- [x] Add a command system.
-- [x] Add a warning system.
-- [ ] Add a complete punishment system.
-- [ ] Add a leveling system.
+PCUBot is a bot written for the PCU Discord Server. 
+The reason behind it's creation is a feature that is not present in any other bot: downgrading an user's rank every 2 warnings.
+Additionally, PCUBot is capable of storing data of users that have left the server, so whenever they come back, they receive all their data back.
 
 ## Notes
