@@ -51,12 +51,16 @@ public class CommandSystem {
             // Check for permission
             if (command.requiresOwner) {
                 Member member = msgEvent.getMember();
+
+                //noinspection ConstantConditions
                 if (member.isOwner()) {
                     failure = command.execute(msgEvent, this, queryArray);
                 }
                 else failure = new Failure("You must be a server owner to do that.");
             } else if (command.requiresAdmin) {
                 Member member = msgEvent.getMember();
+
+                //noinspection ConstantConditions
                 if (member.hasPermission(Permission.ADMINISTRATOR)) {
                     failure = command.execute(msgEvent, this, queryArray);
                 }
