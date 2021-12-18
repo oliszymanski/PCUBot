@@ -85,7 +85,7 @@ public class CommandSystem {
         if (command == null) return;
 
         String titleString = String.format("%s: %s", command.name, command.description);
-        String usageString = String.format("!%s: %s", command.name, command.usage);
+        String usageString = String.format("!%s %s", command.name, command.usage);
 
         embedBuilder.addField(titleString, usageString, false);
 

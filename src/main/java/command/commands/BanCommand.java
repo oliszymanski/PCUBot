@@ -10,7 +10,6 @@ import exceptionWrappers.Parser;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import widgets.OneFieldWidget;
-import widgets.SimpleEmbed;
 
 import java.util.List;
 
@@ -36,16 +35,11 @@ public class BanCommand extends Command {
         args.remove(0);
 
         Database database = Bot.getDatabase();
-        String reason = (!args.isEmpty()) ? Parser.parseString(args) : null;
+        String reason = (!args.isEmpty()) ? Parser.parseString(args) : "No reason given";
 
         Bot.getJda().openPrivateChannelById(userId).queue(privateChannel -> {
-            if (reason != null) {
-                OneFieldWidget widget = new OneFieldWidget(this.title, "You've been permanently banned from the server.", "Reason", reason);
-                privateChannel.sendMessageEmbeds(widget.build()).queue();
-            } else {
-                SimpleEmbed widget = new SimpleEmbed(this.title, "You've been permanently banned from the server.");
-                privateChannel.sendMessageEmbeds(widget.build()).queue();
-            }
+            OneFieldWidget widget = new OneFieldWidget(this.title, "You've been permanently banned from the server.", "Reason", reason);
+            privateChannel.sendMessageEmbeds(widget.build()).queue();
 
             msgEvent.getGuild()
                     .ban(userId, 0, reason)
@@ -55,13 +49,8 @@ public class BanCommand extends Command {
         database.getUser(userId).deleteDocument();
 
         String successAlert = String.format("Succesfully banned %s from the server", userIdRaw);
-        if (reason != null) {
-            OneFieldWidget widget = new OneFieldWidget(this.title, successAlert, "Reason", reason);
-            msgEvent.getChannel().sendMessageEmbeds(widget.build()).queue();
-            return null;
-        }
 
-        SimpleEmbed widget = new SimpleEmbed(this.title, successAlert);
+        OneFieldWidget widget = new OneFieldWidget(this.title, successAlert, "Reason", reason);
         msgEvent.getChannel().sendMessageEmbeds(widget.build()).complete();
 
         return null;
